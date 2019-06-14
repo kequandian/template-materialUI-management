@@ -20,7 +20,9 @@ class MyApp extends App {
   state = {
     loading: false,
   };
+  unmount = true;
   componentDidMount() {
+    this.unmount = false;
     Router.events.on('routeChangeStart', (url) => {
       this.showLoading();
     });
@@ -35,12 +37,19 @@ class MyApp extends App {
       jssStyles.parentNode.removeChild(jssStyles);
     }
   }
+  componentWillUnmount() {
+    this.unmount = true;
+  }
 
   showLoading = () => {
-    this.setState({ loading: true })
+    if (!this.unmount) {
+      this.setState({ loading: true });
+    }
   };
   hideLoading = () => {
-    this.setState({ loading: false })
+    if (!this.unmount) {
+      this.setState({ loading: false });
+    }
   };
 
   render() {
